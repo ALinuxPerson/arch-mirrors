@@ -1,4 +1,6 @@
+//! Internal utilities meant to be only used within this crate.
 pub trait StrExt<'a> {
+    /// Convert a string into an [`Option`](Option).
     fn into_option(self) -> Option<&'a str>;
 }
 
