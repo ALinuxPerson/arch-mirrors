@@ -1,3 +1,6 @@
+//! This module contains every country listed in the Arch Linux mirror status as of the time of
+//! writing (05/20/2021).
+
 /// Create a country. You can supply multiple countries to this, seperated by a comma.
 ///
 /// Format:
