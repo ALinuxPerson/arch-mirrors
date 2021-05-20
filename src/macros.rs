@@ -24,6 +24,36 @@ macro_rules! countries {
             /// Any unsupported country code.
             Other(String)
         }
+
+        impl From<String> for Code {
+            fn from(code: String) -> Self {
+                match code.as_str() {
+                    $(stringify!($code) => Self::$code),+,
+                    _ => Self::Other(code)
+                }
+            }
+        }
+
+        #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Default)]
+        pub struct Country {
+            pub kind: Option<Kind>,
+            pub code: Option<Code>
+        }
+
+        impl Country {
+            $(
+            $(#[$docs])*
+            pub const $snake_case: Country = Country { kind: Some(Kind::$kind), code: Some(Code::$code) };
+            )+
+
+            pub fn new(country: &str, code: &str) -> Self {
+                use $crate::utils::StrExt;
+                let kind = country.into_option().map(ToString::to_string).map(Kind::from);
+                let code = code.into_option().map(ToString::to_string).map(Code::from);
+
+                Self { kind, code }
+            }
+        }
     };
 }
 
