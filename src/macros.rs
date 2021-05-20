@@ -16,6 +16,14 @@ macro_rules! countries {
                 }
             }
         }
+
+        #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
+        pub enum Code {
+             $($(#[$docs])* $code),+,
+
+            /// Any unsupported country code.
+            Other(String)
+        }
     };
 }
 
