@@ -6,6 +6,7 @@ edition = "2018"
 license = "MIT"
 description = "Parse the Arch Linux mirror status."
 homepage = "https://github.com/ALinuxPerson/arch-mirrors/"
+repository = "https://github.com/ALinuxPerson/arch-mirrors/"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
