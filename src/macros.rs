@@ -7,6 +7,15 @@ macro_rules! countries {
             /// Any unsupported country.
             Other(String)
         }
+
+        impl From<String> for Kind {
+            fn from(kind: String) -> Self {
+                match kind.as_str() {
+                    $($name => Self::$kind),+,
+                    _ => Self::Other(kind)
+                }
+            }
+        }
     };
 }
 
