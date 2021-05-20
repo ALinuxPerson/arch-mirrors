@@ -1,5 +1,6 @@
 macro_rules! countries {
     ($($(#[$docs:meta])* $name:literal ($snake_case:ident): $kind:ident => $code:ident),+) => {
+        /// The country name.
         #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
         pub enum Kind {
             $($(#[$docs])* $kind),+,
@@ -17,6 +18,7 @@ macro_rules! countries {
             }
         }
 
+        /// The country code.
         #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
         pub enum Code {
              $($(#[$docs])* $code),+,
@@ -34,9 +36,13 @@ macro_rules! countries {
             }
         }
 
+        /// The country.
         #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Default)]
         pub struct Country {
+            /// The kind of country.
             pub kind: Option<Kind>,
+
+            /// The country code.
             pub code: Option<Code>
         }
 
@@ -46,6 +52,7 @@ macro_rules! countries {
             pub const $snake_case: Country = Country { kind: Some(Kind::$kind), code: Some(Code::$code) };
             )+
 
+            /// Create a new country. If country or code is empty, this will be set to [`None`](None).
             pub fn new(country: &str, code: &str) -> Self {
                 use $crate::utils::StrExt;
                 let kind = country.into_option().map(ToString::to_string).map(Kind::from);
