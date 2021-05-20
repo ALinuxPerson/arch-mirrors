@@ -1,5 +1,7 @@
+//! This is where the [`Status`] struct and all of its direct dependencies go.
 use serde::{Deserialize, Serialize};
 
+/// Raw, typed form of the JSON output given by performing a GET request on [`Status::URL`](Status::URL).
 #[derive(Debug, Serialize, Deserialize)]
 pub(crate) struct Raw {
     cutoff: u32,
@@ -10,19 +12,33 @@ pub(crate) struct Raw {
     version: u32,
 }
 
+/// The status of all the Arch Linux mirrors.
 #[derive(Debug, Clone, PartialOrd, PartialEq)]
 pub struct Status {
+    /// The cut off.
     pub cutoff: u32,
+
+    /// The last time every listed Arch Linux mirror polled the [`lastsync`] file.
     pub last_check: chrono::DateTime<chrono::Utc>,
+
+    /// The number of checks that have been run in the last 24 hours.
     pub num_checks: u32,
+
+    /// The frequency of each check.
     pub check_frequency: u32,
+
+    /// Every known Arch Linux mirror.
     pub urls: Vec<crate::Url>,
+
+    /// The version of the status.
     pub version: u32,
 }
 
 impl Status {
+    /// The URL where the JSON is found from.
     pub const URL: &'static str = "https://archlinux.org/mirrors/status/json";
 
+    /// Get the status from [`Status::URL`](Self::URL).
     pub async fn get() -> reqwest::Result<Self> {
         let response = reqwest::get(Self::URL).await?;
         let raw: Raw = response
