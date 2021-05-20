@@ -1,3 +1,11 @@
+/// Create a country. You can supply multiple countries to this, seperated by a comma.
+///
+/// Format:
+///
+/// ```text
+/// </// documentation>
+/// <name of the country> (<name of the country in screaming snake case>): <name of the country in title case> => (<the country code>)
+/// ```
 macro_rules! countries {
     ($($(#[$docs:meta])* $name:literal ($snake_case:ident): $kind:ident => $code:ident),+) => {
         /// The country name.
