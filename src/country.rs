@@ -29,6 +29,15 @@ macro_rules! countries {
             }
         }
 
+        impl std::fmt::Display for Kind {
+            fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+                match self {
+                    $(Self::$kind => write!(f, "{}", $name)),+,
+                    Self::Other(kind) => write!(f, "{}", kind)
+                }
+            }
+        }
+
         /// The country code.
         #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
         pub enum Code {
@@ -46,6 +55,16 @@ macro_rules! countries {
                 }
             }
         }
+
+        impl std::fmt::Display for Code {
+            fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+                match self {
+                    $(Self::$code => write!(f, "{}", $name)),+,
+                    Self::Other(code) => write!(f, "{}", code)
+                }
+            }
+        }
+
 
         /// The country.
         #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Default)]
