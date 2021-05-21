@@ -30,5 +30,5 @@ Or via `Cargo.toml`:
 
 ```toml
 [dependencies]
-arch-mirrors = "0.1.0"
+arch-mirrors = "0.1.1"
 ```
