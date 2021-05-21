@@ -16,4 +16,19 @@ rusty form.
 
 # Examples
 
-For the examples see [examples](examples/).
+For the examples see [examples](examples).
+
+# Installation
+
+With [`cargo-edit`](https://crates.io/crates/cargo-edit):
+
+```bash
+$ cargo add arch-mirrors
+```
+
+Or via `Cargo.toml`:
+
+```toml
+[dependencies]
+arch-mirrors = "0.1.0"
+```
