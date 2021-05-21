@@ -16,6 +16,9 @@ macro_rules! countries {
         pub enum Kind {
             $($(#[$docs])* $kind),+,
 
+            /// Country which supports all countries.
+            Worldwide,
+
             /// Any unsupported country.
             Other(String)
         }
@@ -24,6 +27,7 @@ macro_rules! countries {
             fn from(kind: String) -> Self {
                 match kind.as_str() {
                     $($name => Self::$kind),+,
+                    "" => Self::Worldwide,
                     _ => Self::Other(kind)
                 }
             }
@@ -32,7 +36,8 @@ macro_rules! countries {
         impl std::fmt::Display for Kind {
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                 match self {
-                    $(Self::$kind => write!(f, "{}", $name)),+,
+                    $(Self::$kind => write!(f, $name)),+,
+                    Self::Worldwide => write!(f, "Worldwide"),
                     Self::Other(kind) => write!(f, "{}", kind)
                 }
             }
@@ -43,14 +48,18 @@ macro_rules! countries {
         pub enum Code {
              $($(#[$docs])* $code),+,
 
-            /// Any unsupported country code.
-            Other(String)
+             /// Country code which supports all countries.
+             Worldwide,
+
+             /// Any unsupported country code.
+             Other(String)
         }
 
         impl From<String> for Code {
             fn from(code: String) -> Self {
                 match code.as_str() {
                     $(stringify!($code) => Self::$code),+,
+                    "" => Self::Worldwide,
                     _ => Self::Other(code)
                 }
             }
@@ -60,6 +69,7 @@ macro_rules! countries {
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                 match self {
                     $(Self::$code => write!(f, "{}", $name)),+,
+                    Self::Worldwide => write!(f, "Worldwide"),
                     Self::Other(code) => write!(f, "{}", code)
                 }
             }
@@ -67,30 +77,35 @@ macro_rules! countries {
 
 
         /// The country.
-        #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Default)]
+        #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
         pub struct Country {
             /// The kind of country.
-            pub kind: Option<Kind>,
+            pub kind: Kind,
 
             /// The country code.
-            pub code: Option<Code>
+            pub code: Code
         }
 
         impl Country {
             $(
             $(#[$docs])*
-            pub const $snake_case: Country = Country { kind: Some(Kind::$kind), code: Some(Code::$code) };
+            pub const $snake_case: Country = Country { kind: Kind::$kind, code: Code::$code };
             )+
             /// An empty placeholder country.
-            pub const EMPTY: Country = Country { kind: None, code: None };
+            pub const WORLDWIDE: Country = Country { kind: Kind::Worldwide, code: Code::Worldwide };
 
             /// Create a new country. If country or code is empty, this will be set to [`None`](None).
             pub fn new(country: &str, code: &str) -> Self {
-                use $crate::utils::StrExt;
-                let kind = country.into_option().map(ToString::to_string).map(Kind::from);
-                let code = code.into_option().map(ToString::to_string).map(Code::from);
+                let kind = Kind::from(country.to_string());
+                let code = Code::from(code.to_string());
 
                 Self { kind, code }
+            }
+        }
+
+        impl Default for Country {
+            fn default() -> Self {
+                Self { kind: Kind::Worldwide, code: Code::Worldwide }
             }
         }
     };
