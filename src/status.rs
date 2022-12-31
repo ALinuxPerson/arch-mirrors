@@ -13,7 +13,7 @@ pub(crate) struct Raw {
 }
 
 /// The status of all the Arch Linux mirrors.
-#[derive(Debug, Clone, PartialOrd, PartialEq)]
+#[derive(Debug, Clone, PartialOrd, PartialEq, Serialize, Deserialize)]
 pub struct Status {
     /// The cut off.
     pub cutoff: u32,

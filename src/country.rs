@@ -11,8 +11,10 @@
 /// ```
 macro_rules! countries {
     ($($(#[$docs:meta])* $name:literal ($snake_case:ident): $kind:ident => $code:ident),+) => {
+        use serde::{Deserialize, Serialize};
+
         /// The country name.
-        #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
+        #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Serialize, Deserialize)]
         pub enum Kind {
             $($(#[$docs])* $kind),+,
 
@@ -44,7 +46,7 @@ macro_rules! countries {
         }
 
         /// The country code.
-        #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
+        #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Serialize, Deserialize)]
         pub enum Code {
              $($(#[$docs])* $code),+,
 
@@ -77,7 +79,7 @@ macro_rules! countries {
 
 
         /// The country.
-        #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]
+        #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq, Hash, Serialize, Deserialize)]
         pub struct Country {
             /// The kind of country.
             pub kind: Kind,
