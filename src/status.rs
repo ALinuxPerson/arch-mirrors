@@ -43,6 +43,7 @@ impl Status {
         Self::get_from_url(Self::URL).await
     }
 
+    /// Get the status from a given url.
     pub async fn get_from_url(url: &str) -> reqwest::Result<Self> {
         let response = reqwest::get(url).await?;
         let raw: Raw = response
