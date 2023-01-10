@@ -43,7 +43,7 @@ impl Status {
         Self::get_from_url(Self::URL).await
     }
 
-    async fn get_from_url(url: &str) -> reqwest::Result<Self> {
+    pub async fn get_from_url(url: &str) -> reqwest::Result<Self> {
         let response = reqwest::get(url).await?;
         let raw: Raw = response
             .json()
