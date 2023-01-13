@@ -13,7 +13,7 @@ pub(crate) struct Raw {
 }
 
 /// The status of all the Arch Linux mirrors.
-#[derive(Debug, Clone, PartialOrd, PartialEq)]
+#[derive(Debug, Clone, PartialOrd, PartialEq, Serialize, Deserialize)]
 pub struct Status {
     /// The cut off.
     pub cutoff: u32,
@@ -39,8 +39,13 @@ impl Status {
     pub const URL: &'static str = "https://archlinux.org/mirrors/status/json";
 
     /// Get the status from [`Status::URL`](Self::URL).
-    pub async fn get() -> reqwest::Result<Self> {
-        let response = reqwest::get(Self::URL).await?;
+    pub async fn get_from_default_url() -> reqwest::Result<Self> {
+        Self::get_from_url(Self::URL).await
+    }
+
+    /// Get the status from a given url.
+    pub async fn get_from_url(url: &str) -> reqwest::Result<Self> {
+        let response = reqwest::get(url).await?;
         let raw: Raw = response
             .json()
             .await

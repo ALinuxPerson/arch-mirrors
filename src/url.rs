@@ -22,7 +22,7 @@ pub(crate) struct Raw {
 }
 
 /// An Arch Linux mirror and its statistics.
-#[derive(Debug, Clone, PartialOrd, PartialEq)]
+#[derive(Debug, Clone, PartialOrd, PartialEq, Serialize, Deserialize)]
 pub struct Url {
     /// The url of the mirror.
     pub url: url::Url,
